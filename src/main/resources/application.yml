@@ -1,0 +1,26 @@
+server:
+  port: 8099
+  #servlet:
+    #context-path: /tired
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.99.84.178:3306/yhb?useSSL=false
+    username: root
+    password: 12345678
+  thymeleaf:
+    cache: false
+    mode: HTML5:UTF-8
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    prefix: classpath:/templates/
+# 打印sql
+logging:
+  level:
+     com.yhb.tired.dao : debug
+#mybatis:
+  #mapper-locations: classpath*:mapper/*Mapper.xml
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*Mapper.xml

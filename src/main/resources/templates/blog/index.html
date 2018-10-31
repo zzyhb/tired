@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<style>
+		body {padding-top: 50px; background: #eee;}
+		.media-left img {width: 350px; height: 180px;}
+		.main {margin-top: 20px;}
+		.content {
+			background: #fff;
+		}
+		.content .media {
+			margin-top: 15px;
+			border-bottom: 1px dotted #ddd;
+			padding-bottom: 15px;
+		}
+		.sidebar li {
+			line-height: 30px;
+		}
+		footer {
+			background: #222;
+			color: #ccc;
+			margin-top: 15px;
+			padding: 20px 0 10px;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-target="#menu" data-toggle="collapse">
+					<span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+				</button>
+				<a href="" class="navbar-brand">YY的博客</a>
+			</div>
+			<div id="menu" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="">首页</a></li>
+					<li><a href="">HTML</a></li>
+					<li><a href="">css</a></li>
+					<li><a href="">JavaScript</a></li>
+				</ul>
+				
+				<form action="" class="navbar-right navbar-form">
+					<div class="input-group">
+						<input type="text" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-primary">搜索</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			
+		</div>
+	</nav>
+
+	<div>
+		<img src="images/baner.jpg" alt="" class="img-responsive">
+	</div>
+
+	<div class="container">
+		<div class="row main">
+			<div class="col-md-9 content">
+				<ul class="media-list">
+					<li class="media">
+						<a href="" class="media-left">
+							<img src="images/post1.jpg" alt="">
+						</a>
+						<div class="media-body">
+							<h2><a href="">H5的新特性</a></h2>
+							<p>
+								<span> <i class="glyphicon glyphicon-user"></i> admin</span> 
+								<em> <i class="glyphicon glyphicon-time"></i> 2017-04-26 12:03:09</em>  
+								<strong> <i class="glyphicon glyphicon-eye-open"></i> 63浏览</strong> 
+								<a href=""> <i class="glyphicon glyphicon-comment"></i>评论一下</a>
+							</p>
+							<p class="summary">
+								H5非常火
+							</p>
+						</div>
+					</li>
+
+					<li class="media">
+						<a href="" class="media-left">
+							<img src="images/post2.gif" alt="">
+						</a>
+						<div class="media-body">
+							<h2><a href="">H5的新特性</a></h2>
+							<p>
+								<span> <i class="glyphicon glyphicon-user"></i> admin</span> 
+								<em> <i class="glyphicon glyphicon-time"></i> 2017-03-26 12:03:09</em>  
+								<strong> <i class="glyphicon glyphicon-eye-open"></i> 63浏览</strong> 
+								<a href=""> <i class="glyphicon glyphicon-comment"></i>评论一下</a>
+							</p>
+							<p class="summary">
+								H5非常火
+							</p>
+						</div>
+					</li>
+
+					<li class="media">
+						<a href="" class="media-left">
+							<img src="images/post3.png" alt="">
+						</a>
+						<div class="media-body">
+							<h2><a href="">H5的新特性</a></h2>
+							<p>
+								<span> <i class="glyphicon glyphicon-user"></i> admin</span> 
+								<em> <i class="glyphicon glyphicon-time"></i> 2017-02-26 12:03:09</em>  
+								<strong> <i class="glyphicon glyphicon-eye-open"></i> 63浏览</strong> 
+								<a href=""> <i class="glyphicon glyphicon-comment"></i>评论一下</a>
+							</p>
+							<p class="summary">
+								H5非常火
+							</p>
+						</div>
+					</li>
+				</ul>
+
+			</div>
+			<div class="col-md-3 sidebar">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<p>热门文章</p>
+					</div>
+					<div class="panel-body">
+						<ul class="list-unstyled">
+							<li> <label class="label label-danger">1</label> <a href="">如何为网站和应用创建设计...</a></li>
+							<li> <label class="label label-danger">2</label> <a href="">如何为网站和应用创建设计...</a></li>
+							<li> <label class="label label-danger">3</label> <a href="">如何为网站和应用创建设计...</a></li>
+							<li> <label class="label label-default">4</label> <a href="">如何为网站和应用创建设计...</a></li>
+							<li> <label class="label label-default">5</label> <a href="">如何为网站和应用创建设计...</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="text-center">
+		<p>版权所有，保留一切权利！ 转载内容版权归作者及来源网站所有，原创内容转载请注明来源。</p>
+		<p>Copyright © 2015-2017 yy All Rights Reserved.</p>
+	</footer>
+</body>
+</html>
