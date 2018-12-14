@@ -6,7 +6,7 @@
 	<groupId>com.yhb</groupId>
 	<artifactId>tired</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>tired</name>
 	<description>Demo project for Spring Boot</description>
@@ -42,6 +42,23 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--rabbitmq-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<!--elasticsearch-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
+		<!--jest elasticsearch客户端-->
+		<!-- https://mvnrepository.com/artifact/io.searchbox/jest -->
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+			<version>6.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
@@ -104,11 +121,12 @@
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>3.0.5</version>
 		</dependency>
-		<!-- velocity 模板引擎, 默认 -->
+
+		<!--分页插件-->
 		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-engine-core</artifactId>
-			<version>2.0</version>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>4.1.6</version>
 		</dependency>
 
 		<!-- freemarker 模板引擎 -->
@@ -123,6 +141,90 @@
 			<artifactId>commons-net</artifactId>
 			<version>3.6</version>
 		</dependency>
+		<!--markdown to html-->
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark</artifactId>
+			<version>0.26.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-util</artifactId>
+			<version>0.26.4</version>
+		</dependency>
+		<!--表格渲染插件-->
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-tables</artifactId>
+			<version>0.26.4</version>
+		</dependency>
+		<!--json必备 start-->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.ezmorph</groupId>
+			<artifactId>ezmorph</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<!--json必备 end-->
+
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<!--缓存-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<!--websocket-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<!--redis-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!--dom4j-->
+		<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -132,12 +234,12 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
 				<version>1.3.2</version>
 				<configuration>
-					<!--&lt;!&ndash;配置文件的位置&ndash;&gt;-->
+					配置文件的位置
 					<configurationFile>src/main/resources/generator/generatorConfig.xml</configurationFile>
 					<verbose>true</verbose>
 					<overwrite>true</overwrite>
@@ -157,7 +259,7 @@
 						<version>1.3.2</version>
 					</dependency>
 				</dependencies>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 

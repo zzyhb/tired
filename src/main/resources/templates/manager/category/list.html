@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>文章分类管理</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/plugins/waves-0.7.5/waves.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/plugins/jquery-confirm/jquery-confirm.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/plugins/select2/css/select2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/resources/css/common.css}" rel="stylesheet"/>
+</head>
+<body>
+<div id="main">
+    <div id="toolbar">
+        <a class="waves-effect waves-button" href="javascript:;" onclick="javascript:window.location.href='/category/edit?id=';"><i class="zmdi zmdi-plus"></i> 新增分类</a>
+        <a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑分类</a>
+        <a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除分类</a>
+    </div>
+    <table id="table"></table>
+</div>
+<script th:src="@{/resources/plugins/jquery.1.12.4.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/resources/plugins/waves-0.7.5/waves.min.js}"></script>
+<script th:src="@{/resources/plugins/jquery-confirm/jquery-confirm.min.js}"></script>
+<script th:src="@{/resources/plugins/select2/js/select2.min.js}"></script>
+
+<script th:src="@{/resources/js/common.js}"></script>
+<script>
+    var $table = $('#table');
+    $(function() {
+        $(document).on('focus', 'input[type="text"]', function() {
+            $(this).parent().find('label').addClass('active');
+        }).on('blur', 'input[type="text"]', function() {
+            if ($(this).val() == '') {
+                $(this).parent().find('label').removeClass('active');
+            }
+        });
+        // bootstrap table初始化
+        // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+        $table.bootstrapTable({
+            url: '/category/getAllCategory',
+            height: getHeight(),
+            striped: true,
+            search: true,
+            searchOnEnterKey: true,
+            showRefresh: true,
+            showToggle: true,
+            showColumns: true,
+            minimumCountColumns: 2,
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            detailView: true,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            //sidePagination: 'server',
+            //silentSort: false,
+            smartDisplay: false,
+            idField: 'id',
+            sortName: 'createDate',
+            sortOrder: 'desc',
+            escape: true,
+            searchOnEnterKey: true,
+            maintainSelected: true,
+            toolbar: '#toolbar',
+            columns: [
+                {field: 'state', checkbox: true},
+                {field: 'id', title: '编号', sortable: true, halign: 'center',align:'center',visible: false},
+                {field: 'name', title: '分类名', sortable: true, halign: 'center',align:'center',},
+                {field: 'createBy', title: '创建人', sortable: true, halign: 'center',align:'center',},
+                {field: 'isEffective', title: '是否有效', sortable: true,formatter:formD, halign: 'center',align:'center',},
+                {field: 'createDate', title: '创建时间', sortable: true,formatter:'transformDate', halign: 'center',align:'center',},
+                {field: 'modifiedDate', title: '最后修改时间', sortable: true,formatter:'transformDate1', halign: 'center',align:'center',},
+                {field: 'remark', title: '备注', sortable: true, halign: 'center',align:'center',},
+            ]
+        }).on('all.bs.table', function (e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+    });
+    function actionFormatter(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" data-toggle="tooltip" title="Like"><i class="glyphicon glyphicon-heart"></i></a>　',
+            '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
+            '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+        ].join('');
+    }
+    function formD(value, row, index) {
+        return row.isEffective=="1"?"有效":row.isEffective=="0"?"无效":"";
+    }
+
+    function transformDate(value, row, index) {
+        var date = row.createDate;
+        var d = new Date(date);
+
+        var times=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        return times;
+    }
+    function transformDate1(value, row, index) {
+        var date = row.modifiedDate;
+        var d = new Date(date);
+
+        var times=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        return times;
+    }
+    
+    window.actionEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like icon, row: ' + JSON.stringify(row));
+        },
+        'click .edit': function (e, value, row, index) {
+            alert('You click edit icon, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            alert('You click remove icon, row: ' + JSON.stringify(row));
+        }
+    };
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
+    }
+    // 编辑
+    function updateAction() {
+        var rows = $table.bootstrapTable('getSelections');
+        if (rows.length != 1) {
+            $.confirm({
+                title: false,
+                content: '请选择一条记录！',
+                autoClose: 'cancel|3000',
+                backgroundDismiss: true,
+                buttons: {
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        } else {
+            window.location.href='/category/edit?id='+rows[0].id;
+        }
+    }
+    // 删除
+    function deleteAction() {
+        var rows = $table.bootstrapTable('getSelections');
+        if (rows.length == 0) {
+            $.confirm({
+                title: false,
+                content: '请至少选择一条记录！',
+                autoClose: 'cancel|3000',
+                backgroundDismiss: true,
+                buttons: {
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        } else {
+            $.confirm({
+                type: 'red',
+                animationSpeed: 300,
+                title: false,
+                content: '确认删除该分类吗？',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        btnClass: 'waves-effect waves-button',
+                        action: function () {
+                            var ids = new Array();
+                            for (var i in rows) {
+                                ids.push(rows[i].id);
+                            }
+                            $.ajax({
+                                url: "/category/delete",
+                                data: {ids: ids.toString()},
+                                success: function (data) {
+                                    $.alert({
+                                        title: '系统提示',
+                                        content: data.message
+                                    });
+                                    $table.bootStrapTable('refresh');
+                                },
+                                error: function (e) {
+                                    alert(e);
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

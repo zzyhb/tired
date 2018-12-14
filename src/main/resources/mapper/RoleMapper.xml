@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yhb.tired.dao.RoleMapper" >
-  <resultMap id="BaseResultMap" type="com.yhb.tired.pojo.sys.Role" >
+<mapper namespace="com.yhb.tired.sys.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.yhb.tired.sys.pojo.Role" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="rolename" property="rolename" jdbcType="VARCHAR" />
     <result column="isEnabled" property="isenabled" jdbcType="INTEGER" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List" >
     id, rolename, isEnabled, remark, createtime, createid, updatetime, updateid
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.pojo.sys.RoleExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.sys.pojo.RoleExample" >
     select
     <if test="distinct" >
       distinct
@@ -96,13 +96,13 @@
     delete from sys_role
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.yhb.tired.pojo.sys.RoleExample" >
+  <delete id="deleteByExample" parameterType="com.yhb.tired.sys.pojo.RoleExample" >
     delete from sys_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yhb.tired.pojo.sys.Role" >
+  <insert id="insert" parameterType="com.yhb.tired.sys.pojo.Role" >
     insert into sys_role (id, rolename, isEnabled, 
       remark, createtime, createid, 
       updatetime, updateid)
@@ -110,7 +110,7 @@
       #{remark,jdbcType=VARCHAR}, #{createtime,jdbcType=DATE}, #{createid,jdbcType=VARCHAR}, 
       #{updatetime,jdbcType=DATE}, #{updateid,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yhb.tired.pojo.sys.Role" >
+  <insert id="insertSelective" parameterType="com.yhb.tired.sys.pojo.Role" >
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -165,7 +165,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.yhb.tired.pojo.sys.RoleExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.yhb.tired.sys.pojo.RoleExample" resultType="java.lang.Integer" >
     select count(*) from sys_role
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -217,7 +217,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.pojo.sys.Role" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.sys.pojo.Role" >
     update sys_role
     <set >
       <if test="rolename != null" >
@@ -244,7 +244,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.pojo.sys.Role" >
+  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.sys.pojo.Role" >
     update sys_role
     set rolename = #{rolename,jdbcType=VARCHAR},
       isEnabled = #{isenabled,jdbcType=INTEGER},

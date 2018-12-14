@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yhb.tired.dao.ArticleContentMapper" >
-  <resultMap id="BaseResultMap" type="com.yhb.tired.pojo.sys.ArticleContent" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="article_id" property="articleId" jdbcType="BIGINT" />
-    <result column="create_by" property="createBy" jdbcType="TIMESTAMP" />
-    <result column="modifield_by" property="modifieldBy" jdbcType="TIMESTAMP" />
+<mapper namespace="com.yhb.tired.article.dao.ArticleContentMapper" >
+  <resultMap id="BaseResultMap" type="com.yhb.tired.article.pojo.ArticleContent" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="categoryid" property="categoryid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="createid" property="createid" jdbcType="VARCHAR" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="updateid" property="updateid" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.yhb.tired.pojo.sys.ArticleContent" extends="BaseResultMap" >
+  <resultMap id="BaseResultMap_1" type="com.yhb.tired.article.pojo.ArticleContent" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="categoryid" property="categoryid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="count" property="remark" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="nickname" property="createid" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yhb.tired.article.pojo.ArticleContentWithBLOBs" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="htmlContent" property="htmlcontent" jdbcType="LONGVARCHAR" />
   </resultMap>
+  <select id="selectBySql" resultMap="BaseResultMap_1">
+    SELECT
+	a.id,a.categoryid,a.title,a.summary,a.remark,a.createtime,
+	u.nickname,(SELECT count(*) from article_view where content_id = a.id) as count
+    FROM
+	article_content a
+    LEFT JOIN sys_user u ON a.createid = u.id
+    WHERE a.type = 1
+    ORDER BY
+	a.createtime DESC
+  </select>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -40,12 +68,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, article_id, create_by, modifield_by
+    id, categoryid, title, summary, type, remark, createtime, createid, updatetime, updateid
   </sql>
   <sql id="Blob_Column_List" >
-    content
+    content, htmlContent
   </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.tired.pojo.sys.ArticleContentExample" >
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yhb.tired.article.pojo.ArticleContentExample" >
     select
     <if test="distinct" >
       distinct
@@ -54,7 +82,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from tbl_article_content
+    from article_content
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -62,14 +90,14 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.pojo.sys.ArticleContentExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.article.pojo.ArticleContentExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     'false' as QUERYID,
     <include refid="Base_Column_List" />
-    from tbl_article_content
+    from article_content
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -77,92 +105,174 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from tbl_article_content
-    where id = #{id,jdbcType=BIGINT}
+    from article_content
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from tbl_article_content
-    where id = #{id,jdbcType=BIGINT}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from article_content
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.yhb.tired.pojo.sys.ArticleContent" >
-    insert into tbl_article_content (id, article_id, create_by, 
-      modifield_by, content)
-    values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, #{createBy,jdbcType=TIMESTAMP}, 
-      #{modifieldBy,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  <insert id="insert" parameterType="com.yhb.tired.article.pojo.ArticleContentWithBLOBs" >
+    insert into article_content (id, categoryid, title, 
+      summary, type, remark, 
+      createtime, createid, updatetime, 
+      updateid, content, htmlContent
+      )
+    values (#{id,jdbcType=VARCHAR}, #{categoryid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createid,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updateid,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}, #{htmlcontent,jdbcType=LONGVARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.yhb.tired.pojo.sys.ArticleContent" >
-    insert into tbl_article_content
+  <insert id="insertSelective" parameterType="com.yhb.tired.article.pojo.ArticleContentWithBLOBs" >
+    insert into article_content
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="articleId != null" >
-        article_id,
+      <if test="categoryid != null" >
+        categoryid,
       </if>
-      <if test="createBy != null" >
-        create_by,
+      <if test="title != null" >
+        title,
       </if>
-      <if test="modifieldBy != null" >
-        modifield_by,
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createid != null" >
+        createid,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="updateid != null" >
+        updateid,
       </if>
       <if test="content != null" >
         content,
       </if>
+      <if test="htmlcontent != null" >
+        htmlContent,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+        #{id,jdbcType=VARCHAR},
       </if>
-      <if test="articleId != null" >
-        #{articleId,jdbcType=BIGINT},
+      <if test="categoryid != null" >
+        #{categoryid,jdbcType=VARCHAR},
       </if>
-      <if test="createBy != null" >
-        #{createBy,jdbcType=TIMESTAMP},
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
       </if>
-      <if test="modifieldBy != null" >
-        #{modifieldBy,jdbcType=TIMESTAMP},
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createid != null" >
+        #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateid != null" >
+        #{updateid,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="htmlcontent != null" >
+        #{htmlcontent,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.pojo.sys.ArticleContent" >
-    update tbl_article_content
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.article.pojo.ArticleContentWithBLOBs" >
+    update article_content
     <set >
-      <if test="articleId != null" >
-        article_id = #{articleId,jdbcType=BIGINT},
+      <if test="categoryid != null" >
+        categoryid = #{categoryid,jdbcType=VARCHAR},
       </if>
-      <if test="createBy != null" >
-        create_by = #{createBy,jdbcType=TIMESTAMP},
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="modifieldBy != null" >
-        modifield_by = #{modifieldBy,jdbcType=TIMESTAMP},
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createid != null" >
+        createid = #{createid,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateid != null" >
+        updateid = #{updateid,jdbcType=VARCHAR},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="htmlcontent != null" >
+        htmlContent = #{htmlcontent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.tired.pojo.sys.ArticleContent" >
-    update tbl_article_content
-    set article_id = #{articleId,jdbcType=BIGINT},
-      create_by = #{createBy,jdbcType=TIMESTAMP},
-      modifield_by = #{modifieldBy,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yhb.tired.article.pojo.ArticleContentWithBLOBs" >
+    update article_content
+    set categoryid = #{categoryid,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createid = #{createid,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateid = #{updateid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR},
+      htmlContent = #{htmlcontent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.pojo.sys.ArticleContent" >
-    update tbl_article_content
-    set article_id = #{articleId,jdbcType=BIGINT},
-      create_by = #{createBy,jdbcType=TIMESTAMP},
-      modifield_by = #{modifieldBy,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
+  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.article.pojo.ArticleContent" >
+    update article_content
+    set categoryid = #{categoryid,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createid = #{createid,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateid = #{updateid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

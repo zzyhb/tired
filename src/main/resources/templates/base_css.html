@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="BaseCss(title)">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title th:text="${title}"></title>
+        <link th:href="@{/resources/plugins/fullPage/jquery.fullPage.css}" rel="stylesheet"/>
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/waves-0.7.5/waves.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/css/admin.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/jquery-confirm/jquery-confirm.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/plugins/select2/css/select2.min.css}" rel="stylesheet"/>
+        <link th:href="@{/resources/css/common.css}" rel="stylesheet"/>
+    </div>
+</body>
+</html>

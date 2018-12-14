@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <style>
+        body {padding-top: 50px; background: #eee;}
+        .media-left img {width: 350px; height: 180px;}
+        .main {margin-top: 20px;}
+        .content {
+            background: #fff;
+        }
+        .content .media {
+            margin-top: 15px;
+            border-bottom: 1px dotted #ddd;
+            padding-bottom: 15px;
+        }
+        .sidebar li {
+            line-height: 30px;
+        }
+        footer {
+            background: #222;
+            color: #ccc;
+            margin-top: 15px;
+            padding: 20px 0 10px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-target="#menu" data-toggle="collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:href="@{/blog/index/0/0}" class="navbar-brand">Yhb的博客</a>
+        </div>
+        <div id="menu" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="">首页</a></li>
+                <li><a href="" onclick="javascript:alert('攻城狮正在努力建设中...')">HTML</a></li>
+                <li><a href="" onclick="javascript:alert('攻城狮正在努力建设中...')">css</a></li>
+                <li><a href="" onclick="javascript:alert('攻城狮正在努力建设中...')">JavaScript</a></li>
+            </ul>
+
+            <form action="" class="navbar-right navbar-form">
+                <a class="waves-effect waves-light" th:href="@{/index}">
+                    <i>前往后台首页</i>
+                </a>
+                <div class="input-group">
+                    <input type="text" class="form-control">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary">搜索</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</nav>
+
+<div>
+    <img th:src="@{/blogpage/images/baner.jpg}" alt="点击有惊喜" class="img-responsive">
+</div>
+</body>
+</html>

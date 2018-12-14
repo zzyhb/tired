@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-md-3 sidebar">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>热门文章</p>
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled">
+                <li th:each="article,articleStart:${all.items}" th:if="${articleStart.count}<=3">
+                    <label th:if="${articleStart.count}==1" class="label label-danger">[[${articleStart.index}+1]]</label>
+                    <label th:if="${articleStart.count}>1" class="label label-default">[[${articleStart.index}+1]]</label>
+                    <a th:href="@{'/blog/getArticleByid?id='+${article.id}}">[[${article.title}]]</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

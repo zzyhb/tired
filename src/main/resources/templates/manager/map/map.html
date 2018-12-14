@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" type="text/css">
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=eb06bf60e8c041b39c83f9cd4c66a779"></script>
+    <style>
+        #container {width:100%; height: 825px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="container"></div>
+    </div>
+
+
+
+</body>
+<script type="text/javascript">
+    var map = new AMap.Map('container',{
+        zoom:12,
+        center:[113.75310500890015,34.766796888226104],//信阳
+        /*pitch:45,// 地图俯仰角度，有效范围 0 度- 83 度
+        viewMode:'3D',*/
+        //mapStyle: 'amap://styles/macaron', //设置地图的显示样式
+    });
+    // 构造点标记
+    var marker = new AMap.Marker({
+        icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+        position: [113.75310500890015,34.766796888226104]
+    });
+    // 构造矢量圆形
+    var circle = new AMap.Circle({
+        center: new AMap.LngLat(114.08,32.13), // 圆心位置
+        radius: 1000,  //半径
+        strokeColor: "#F33",  //线颜色
+        strokeOpacity: 1,  //线透明度
+        strokeWeight: 3,  //线粗细度
+        fillColor: "#ee2200",  //填充颜色
+        fillOpacity: 0.35 //填充透明度
+    });
+    map.add(marker);
+    //map.add(circle);
+
+    AMap.event.addListener(map,'click',function (e) {
+        new AMap.Marker({
+            position:e.lnglat,
+            map:map,
+        });
+    })
+
+    // 同时引入工具条插件，比例尺插件和鹰眼插件
+    AMap.plugin([
+        'AMap.ToolBar',
+        'AMap.Scale',
+        'AMap.OverView',
+        'AMap.MapType',
+        'AMap.Geolocation',
+    ], function(){
+        // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+        map.addControl(new AMap.ToolBar());
+        // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+        map.addControl(new AMap.Scale());
+        // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+        map.addControl(new AMap.OverView({isOpen:true}));
+        // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+        map.addControl(new AMap.MapType());
+        // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+        map.addControl(new AMap.Geolocation());
+    });
+
+    //加载天气查询插件
+    AMap.plugin('AMap.Weather', function() {
+        //创建天气查询实例
+        var weather = new AMap.Weather();
+        //执行实时天气信息查询
+        weather.getLive('杭州市', function(err, data) {
+            console.log(err, data);
+        });
+    });
+</script>
+</html>

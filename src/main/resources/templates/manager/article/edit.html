@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>写博客</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"
+          href="/css/style.css"/>
+    <link rel="stylesheet" th:href="@{/editormd/css/editormd.css}"
+          href="/editormd/css/editormd.css"/>
+</head>
+<body>
+<form>
+    <table>
+        <tr>
+            <div class="input-group myStyle" style="width: 50%;height: 50%;margin-top: 10px" align="center">
+                <input th:type="hidden" th:id="id" th:value="${article}!=''?${article.id}:''">
+                <span class="input-group-addon">标题</span>
+                <input type="text" th:value="${article}!=''?${article.title}:''" class="form-control" required
+                       th:id="title" placeholder="请输入标题">
+            </div>
+        </tr>
+        <tr>
+            <div class="input-group myStyle" style="width: 20%;height: 20%;margin-top: 15px;margin-bottom: 15px;">
+                <span class="input-group-addon">分类标签</span>
+                <select class="form-control">
+                    <option value=""> -- 请选择 --</option>
+                    <option th:selected="${article}!=''?${article.categoryid eq category.id}:false"
+                            th:each="category : ${categories}" th:text="${category.name}"
+                            th:value="${category.id}"></option>
+                </select>
+            </div>
+        </tr>
+        <tr>
+            <div class="input-group myStyle" style="width: 70%;height: 70%;margin-top: 15px;margin-bottom: 15px;">
+                <span class="input-group-addon">摘要</span>
+                <input type="text" class="form-control" th:value="${article}!=''?${article.summary}:''" required
+                       th:id="summary" placeholder="请输入摘要">
+            </div>
+        </tr>
+        <tr>
+            <div class="editormd" id="test-editormd">
+                <textarea th:text="${article}!=''?${article.content}:''" class="editormd-markdown-textarea"
+                          onpaste="myFunction()"
+                          name="file" id="content"></textarea>
+                <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
+                <textarea th:text="${article}!=''?${article.htmlcontent}:''" class="editormd-html-textarea"
+                          name="file1" id="htmlcontent"></textarea>
+            </div>
+        </tr>
+        <tr>
+            <div class="input-group myStyle" style="width: 20%;height: 20%;margin-top: 15px;margin-bottom: 15px;">
+                <span class="input-group-addon">是否共享</span>
+                <select class="form-control">
+                    <option value=""> -- 请选择 --</option>
+                    <option th:selected="${article}!=''?${article.type}==0:false" th:value="0">不共享</option>
+                    <option th:selected="${article}!=''?${article.type}==1:false" th:value="1">共享</option>
+                </select>
+            </div>
+        </tr>
+        <tr>
+            <div class="input-group myStyle" style="width: 70%;height: 70%">
+                <span class="input-group-addon">备注</span>
+                <input type="text" class="form-control" th:value="${article}!=''?${article.remark}:''" th:id="remark"
+                       placeholder="请输入备注">
+            </div>
+        </tr>
+        <tr>
+            <div class="button-group" style="margin-top: 20px;">
+                <button type="button" class="btn btn-success" style="background-color: lightgreen" th:id="submitBtn">
+                    保存并发布
+                </button>
+                <button type="button" style="background-color: lightcoral"
+                        onclick="javascript:window.location.href = document.referrer;" class="btn btn-info">取消
+                </button>
+            </div>
+        </tr>
+    </table>
+</form>
+
+</body>
+<script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
+<script th:src="@{/resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/resources/plugins/waves-0.7.5/waves.min.js}"></script>
+<script th:src="@{/resources/plugins/jquery-confirm/jquery-confirm.min.js}"></script>
+<script th:src="@{/resources/plugins/select2/js/select2.min.js}"></script>
+<script th:src="@{/editormd/js/editormd.js}" src="/editormd/js/editormd.js"></script>
+<script type="text/javascript">
+    $(function () {
+            editormd("test-editormd", {
+                width: "90%",
+                height: 600,
+                syncScrolling: "single",
+                htmlDecode: "style,script,iframe",
+                taskList: true,
+                sequenceDiagram: true,  // 默认不解析
+                emoji: true,
+                //你的lib目录的路径，我这边用JSP做测试的
+                tocm: true, // Using [TOCM]
+                tex: true, // 开启科学公式TeX语言支持，默认关闭
+                flowChart: true, // 开启流程图支持，默认关闭
+                path: "/editormd/lib/",
+                //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+                saveHTMLToTextarea: true,
+                /**上传图片相关配置如下*/
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/user/uploadFile/",//注意你后端的上传图片服务地址
+            });
+
+            $("#submitBtn").click(
+                function () {
+                    submitblog();
+                }
+            )
+
+            /**
+             * 粘贴上传图片
+             */
+            $("#content").on('paste', function (ev) {
+                console.log(11);
+                var data = ev.clipboardData;
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                for (var index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var blob = item.getAsFile();
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            var base64 = event.target.result;
+                            //ajax上传图片
+                            $.post("{:url('api/uploader/upEditorImg')}",{base:base64}, function (ret) {
+                                layer.msg(ret.msg);
+                                if (ret.code === 1) {
+                                    //新一行的图片显示
+                                    editor.insertValue("\n![" + ret.data.title + "](" + ret.data.path + ")");
+                                }
+                            });
+                        }; // data url!
+                        var url = reader.readAsDataURL(blob);
+                    }
+                }
+            });
+        }
+    );
+
+    function submitblog() {
+        var title = $("#title").val();
+        var content = $("#content").val();
+        var htmlcontent = $("#htmlcontent").val();
+        var categoryid = $("select").eq(0).find("option:selected").val();
+        var type = $("select").eq(1).find("option:selected").val();
+        $.ajax({
+            url: "/article/save",
+            type: 'post',
+            data: {
+                id: $("#id").val(),
+                categoryid: categoryid,
+                type: type,
+                title: title,
+                summary: $("#summary").val(),
+                content: content,
+                htmlcontent: htmlcontent,
+                remark: $("#remark").val()
+            },
+            success: function (data) {
+                window.location.href = document.referrer;
+                $.alert({
+                    title: '系统提示',
+                    content: data.message
+                });
+            },
+            error: function (e) {
+                alert(e);
+            }
+        })
+    }
+</script>
+</html>

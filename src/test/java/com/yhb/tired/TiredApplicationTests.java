@@ -2,13 +2,16 @@ package com.yhb.tired;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.applet.AppletContext;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 @RunWith(SpringRunner.class)
@@ -16,6 +19,7 @@ import java.applet.AppletContext;
 public class TiredApplicationTests {
 	@Autowired
 	private ApplicationContext ioc;
+
 
 	@Test
 	public void test1(){
@@ -26,7 +30,7 @@ public class TiredApplicationTests {
 	}
 
 	@Test
-	public void contextLoads() {
-	}
+	public void testRabbitMq(){
 
+	}
 }

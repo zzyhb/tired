@@ -1,14 +1,18 @@
 server:
   port: 8099
-  #servlet:
-    #context-path: /tired
-
+  tomcat:
+    max-http-header-size: 4048576
 spring:
+  #数据库
   datasource:
+    #配置Druid数据源后，此处的配置将失效
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.99.84.178:3306/yhb?useSSL=false
+    #url: jdbc:mysql://localhost:3306/yhb?useSSL=false
     username: root
-    password: 12345678
+    password: 147258369
+    type: com.alibaba.druid.pool.DruidDataSource
+  #thymeleaf模板引擎
   thymeleaf:
     cache: false
     mode: HTML5:UTF-8
@@ -16,11 +20,39 @@ spring:
     servlet:
       content-type: text/html
     prefix: classpath:/templates/
+  #内置tomcat上传文件限制
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
+  #redis的相关配置
+  redis:
+    host: 47.99.84.178
+    port: 6379
+    password: 147258369
+    database: 5
+    timeout: 8000
+  #rabbitmq
+  rabbitmq:
+    addresses: 47.99.84.178
+    username: guest
+    password: guest
+    connection-timeout: 10000
+  #elasticsearch
+  elasticsearch:
+    jest:
+      uris: http://47.99.84.178:9200/
+  #data:
+    #elasticsearch:
+      #cluster-nodes: 47.99.84.178:9300
+      #cluster-name: elasticsearch
 # 打印sql
 logging:
   level:
-     com.yhb.tired.dao : debug
+     com.yhb.tired.sys.dao : debug
+     com.yhb.tired.article.dao : debug
 #mybatis:
   #mapper-locations: classpath*:mapper/*Mapper.xml
 mybatis-plus:
   mapper-locations: classpath*:mapper/*Mapper.xml
+

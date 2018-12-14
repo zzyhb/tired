@@ -1,0 +1,94 @@
+﻿<!DOCTYPE HTML>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>日志管理</title>
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/plugins/waves-0.7.5/waves.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/plugins/jquery-confirm/jquery-confirm.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/plugins/select2/css/select2.min.css}" rel="stylesheet"/>
+	<link th:href="@{/resources/css/common.css}" rel="stylesheet"/>
+</head>
+<body>
+<script th:src="@{/resources/plugins/jquery.1.12.4.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js}"></script>
+<script th:src="@{/resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/resources/plugins/waves-0.7.5/waves.min.js}"></script>
+<script th:src="@{/resources/plugins/jquery-confirm/jquery-confirm.min.js}"></script>
+<script th:src="@{/resources/plugins/select2/js/select2.min.js}"></script>
+<script th:src="@{/resources/js/common.js}"></script>
+<div id="main">
+	<!--<div id="toolbar">
+		<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增用户</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑用户</a>
+		<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除用户</a>
+	</div>-->
+	<table id="table"></table>
+</div>
+<script>
+
+var $table = $('#table');
+$(function() {
+	$(document).on('focus', 'input[type="text"]', function() {
+		$(this).parent().find('label').addClass('active');
+	}).on('blur', 'input[type="text"]', function() {
+		if ($(this).val() == '') {
+			$(this).parent().find('label').removeClass('active');
+		}
+	});
+	// bootstrap table初始化
+	// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+	$table.bootstrapTable({
+		url: '/log/getAllLogs',
+		height: getHeight(),
+		striped: true,
+		search: true,
+		searchOnEnterKey: true,
+		showRefresh: true,
+		showToggle: true,
+		showColumns: true,
+		minimumCountColumns: 2,
+		showPaginationSwitch: true,
+		clickToSelect: true,
+		detailView: true,
+		detailFormatter: 'detailFormatter',
+		pagination: true,
+		paginationLoop: false,
+		classes: 'table table-hover table-no-bordered',
+		//sidePagination: 'server',
+		//silentSort: false,
+		smartDisplay: false,
+		idField: 'id',
+		sortName: 'id',
+		sortOrder: 'desc',
+		escape: true,
+		searchOnEnterKey: true,
+		maintainSelected: true,
+		columns: [
+			{field: 'state', checkbox: true},
+			{field: 'id', title: '编号', sortable: true, halign: 'center',hidden:true},
+			{field: 'operateType', title: '操作类型', sortable: true, halign: 'center',formatter:function (value,row,index) {
+				return row["operateType"]=="0"?"退出":row["operateType"]=="1"?"登录":row["operateType"]=="2"?"其他":""
+            }},
+			{field: 'ip', title: 'IP地址', sortable: true, halign: 'center'},
+            {field: 'requestUrl', title: '操作的访问地址', sortable: true, halign: 'center'},
+            {field: 'browserType', title: '浏览器', sortable: true, halign: 'center'},
+            {field: 'createDate', title: '操作日期', sortable: true, halign: 'center'},
+            {field: 'createBy', title: '操作人', sortable: true, halign: 'center'},
+            {field: 'remark', title: '备注', sortable: true, halign: 'center'},
+			/*{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}*/
+		]
+	}).on('all.bs.table', function (e, name, args) {
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();  
+	});
+});
+
+</script>
+</body>
+</html>

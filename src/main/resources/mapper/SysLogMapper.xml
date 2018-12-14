@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yhb.tired.dao.SysLogMapper" >
-  <resultMap id="BaseResultMap" type="com.yhb.tired.pojo.sys.SysLog" >
+<mapper namespace="com.yhb.tired.sys.dao.SysLogMapper" >
+  <resultMap id="BaseResultMap" type="com.yhb.tired.sys.pojo.SysLog" >
     <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="operate_type" property="operateType" jdbcType="VARCHAR" />
     <result column="ip" property="ip" jdbcType="VARCHAR" />
-    <result column="create_by" property="createBy" jdbcType="TIMESTAMP" />
+    <result column="request_url" property="requestUrl" jdbcType="VARCHAR" />
+    <result column="browser_type" property="browserType" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="operate_url" property="operateUrl" jdbcType="VARCHAR" />
-    <result column="operate_by" property="operateBy" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -39,9 +41,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, ip, create_by, remark, operate_url, operate_by
+    id, operate_type, ip, request_url, browser_type, create_date, create_by, remark
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.pojo.sys.SysLogExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yhb.tired.sys.pojo.SysLogExample" >
     select
     <if test="distinct" >
       distinct
@@ -66,22 +68,34 @@
     delete from sys_log
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.yhb.tired.pojo.sys.SysLog" >
-    insert into sys_log (id, ip, create_by, 
-      remark, operate_url, operate_by
-      )
-    values (#{id,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{createBy,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR}, #{operateUrl,jdbcType=VARCHAR}, #{operateBy,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.yhb.tired.sys.pojo.SysLog" >
+    insert into sys_log (id, operate_type, ip, 
+      request_url, browser_type, create_date, 
+      create_by, remark)
+    values (#{id,jdbcType=VARCHAR}, #{operateType,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{requestUrl,jdbcType=VARCHAR}, #{browserType,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yhb.tired.pojo.sys.SysLog" >
+  <insert id="insertSelective" parameterType="com.yhb.tired.sys.pojo.SysLog" >
     insert into sys_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
+      <if test="operateType != null" >
+        operate_type,
+      </if>
       <if test="ip != null" >
         ip,
+      </if>
+      <if test="requestUrl != null" >
+        request_url,
+      </if>
+      <if test="browserType != null" >
+        browser_type,
+      </if>
+      <if test="createDate != null" >
+        create_date,
       </if>
       <if test="createBy != null" >
         create_by,
@@ -89,62 +103,70 @@
       <if test="remark != null" >
         remark,
       </if>
-      <if test="operateUrl != null" >
-        operate_url,
-      </if>
-      <if test="operateBy != null" >
-        operate_by,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="operateType != null" >
+        #{operateType,jdbcType=VARCHAR},
+      </if>
       <if test="ip != null" >
         #{ip,jdbcType=VARCHAR},
       </if>
+      <if test="requestUrl != null" >
+        #{requestUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="browserType != null" >
+        #{browserType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
       <if test="createBy != null" >
-        #{createBy,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="operateUrl != null" >
-        #{operateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="operateBy != null" >
-        #{operateBy,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.pojo.sys.SysLog" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.yhb.tired.sys.pojo.SysLog" >
     update sys_log
     <set >
+      <if test="operateType != null" >
+        operate_type = #{operateType,jdbcType=VARCHAR},
+      </if>
       <if test="ip != null" >
         ip = #{ip,jdbcType=VARCHAR},
       </if>
+      <if test="requestUrl != null" >
+        request_url = #{requestUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="browserType != null" >
+        browser_type = #{browserType,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
       <if test="createBy != null" >
-        create_by = #{createBy,jdbcType=TIMESTAMP},
+        create_by = #{createBy,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="operateUrl != null" >
-        operate_url = #{operateUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="operateBy != null" >
-        operate_by = #{operateBy,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.pojo.sys.SysLog" >
+  <update id="updateByPrimaryKey" parameterType="com.yhb.tired.sys.pojo.SysLog" >
     update sys_log
-    set ip = #{ip,jdbcType=VARCHAR},
-      create_by = #{createBy,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR},
-      operate_url = #{operateUrl,jdbcType=VARCHAR},
-      operate_by = #{operateBy,jdbcType=VARCHAR}
+    set operate_type = #{operateType,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      request_url = #{requestUrl,jdbcType=VARCHAR},
+      browser_type = #{browserType,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
